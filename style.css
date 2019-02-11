@@ -1,0 +1,84 @@
+
+#buttons-container {
+  position: absolute;
+  z-index: 2;  
+  width: 100vw;
+}
+
+#full-screen-video {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+#lower-video-bar {
+  height: 20vh;
+}
+
+#local-stream-container { 
+  position: relative; 
+  display: inline-block;
+}
+
+.remote-stream-container { 
+  display: inline-block;
+}
+
+#remote-streams {
+  height: 100%;
+}
+
+#local-video {
+  position: absolute;
+  z-index: 1;
+  height: 20vh;
+  max-width: 100%;
+}
+
+.remote-video {
+  position: absolute;
+  z-index: 1;
+  height: 100% !important;
+  width: 80%;
+  max-width: 500px;
+}
+
+#mute-overlay {
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  color: #d9d9d9;
+  font-size: 2em;
+  padding: 0 0 3px 3px;
+  display: none;
+} 
+
+.mute-overlay {
+  position: absolute;
+  z-index: 2;
+  top: 2px;
+  color: #d9d9d9;
+  font-size: 1.5em;
+  padding: 2px 0 0 2px;
+  display: none;
+}
+
+#no-local-video, .no-video-overlay {
+  position: absolute;
+  z-index: 3;
+  width: 100%;
+  top: 40%;
+  color: #cccccc;
+  font-size: 2.5em;
+  margin: 0 auto;
+  display: none;
+}
+
+.no-video-overlay {
+  width: 80%;
+}
+
+#screen-share-btn-container {
+  z-index: 99;
+}
