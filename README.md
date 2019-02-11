@@ -9,3 +9,5 @@ This is a group video chat web app that uses [Agora.io](https://www.agora.io) to
 - An understand of how Bootstrap and JQuery function _(minimal knowledge needed)_
 
 Read the full tutorail on Medium: [Building a group video chat app](https://medium.com/agora-io/building-a-group-video-chat-app-bc05e8962c41)
+
+Check out the [demo of the code in action](https://agora-group-video-chat.herokuapp.com) on Heroku
