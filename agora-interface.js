@@ -1,10 +1,9 @@
-
-// app / channel settings
-var agoraAppId = ""; // Set your Agora App ID
-var channelName = 'agora-web-docs-demo'; // channel name can be anything you'd like
+/*
+ * JS Interface for Agora.io SDK
+ */
 
 // video profile settings
-var cameraVideoProfile = '480_4'; // 640 × 480 @ 30fps & 750kbs
+var cameraVideoProfile = '480_4'; // 640 × 480 @ 30fps  & 750kbs
 var screenVideoProfile = '480_2'; // 640 × 480 @ 30fps
 
 // create client instances for camera (client) and screen share (screenClient)
@@ -28,13 +27,16 @@ var localStreams = {
 var mainStreamId; // reference to main stream
 var screenShareActive = false; // flag for screen share 
 
-// init Agora SDK
-client.init(agoraAppId, function () {
-  console.log("AgoraRTC client initialized");
-  joinChannel(); // join channel upon successfull init
-}, function (err) {
-  console.log("[ERROR] : AgoraRTC client init failed", err);
-});
+function initClientAndJoinChannel(agoraAppId, channelName) {
+  // init Agora SDK
+  client.init(agoraAppId, function () {
+    console.log("AgoraRTC client initialized");
+    joinChannel(channelName); // join channel upon successfull init
+  }, function (err) {
+    console.log("[ERROR] : AgoraRTC client init failed", err);
+  });
+}
+
 
 client.on('stream-published', function (evt) {
   console.log("Publish local stream successfully");
@@ -113,7 +115,7 @@ client.on("unmute-video", function (evt) {
 });
 
 // join a channel
-function joinChannel() {
+function joinChannel(channelName) {
   var token = generateToken();
   var userID = null; // set to null to auto generate uid on successfull connection
   client.join(token, channelName, userID, function(uid) {
@@ -280,7 +282,9 @@ function leaveChannel() {
     $("#exit-btn").prop("disabled", true);
     // hide the mute/no-video overlays
     toggleVisibility("#mute-overlay", false); 
-    toggleVisibility("#no-local-video", false); 
+    toggleVisibility("#no-local-video", false);
+    // show the modal overlay to join
+    $("#modalForm").modal("show"); 
   }, function(err) {
     console.log("client leave failed ", err); //error handling
   });
