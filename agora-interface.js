@@ -7,8 +7,8 @@ var cameraVideoProfile = '480_4'; // 640 × 480 @ 30fps  & 750kbs
 var screenVideoProfile = '480_2'; // 640 × 480 @ 30fps
 
 // create client instances for camera (client) and screen share (screenClient)
-var client = AgoraRTC.createClient({mode: 'rtc', codec: "h264"}); // h264 better detail at a higher motion
-var screenClient = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'}); // use the vp8 for better detail in low motion
+var client = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'}); 
+var screenClient = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'}); 
 
 // stream references (keep track of active streams) 
 var remoteStreams = {}; // remote streams obj struct [id : stream] 
