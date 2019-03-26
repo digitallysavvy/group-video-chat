@@ -3,8 +3,8 @@
  */
 
 // video profile settings
-var cameraVideoProfile = '480_4'; // 640 × 480 @ 30fps  & 750kbs
-var screenVideoProfile = '480_2'; // 640 × 480 @ 30fps
+var cameraVideoProfile = '480p_4'; // 640 × 480 @ 30fps  & 750kbs
+var screenVideoProfile = '480p_2'; // 640 × 480 @ 30fps
 
 // create client instances for camera (client) and screen share (screenClient)
 var client = AgoraRTC.createClient({mode: 'rtc', codec: 'vp8'}); 
