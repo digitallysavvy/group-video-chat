@@ -94,10 +94,10 @@ function toggleMic(localStream) {
   toggleBtn($("#mic-btn")); // toggle button colors
   $("#mic-icon").toggleClass('fa-microphone').toggleClass('fa-microphone-slash'); // toggle the mic icon
   if ($("#mic-icon").hasClass('fa-microphone')) {
-    localStream.enableAudio(); // enable the local mic
+    localStream.unmuteAudio(); // enable the local mic
     toggleVisibility("#mute-overlay", false); // hide the muted mic icon
   } else {
-    localStream.disableAudio(); // mute the local mic
+    localStream.muteAudio(); // mute the local mic
     toggleVisibility("#mute-overlay", true); // show the muted mic icon
   }
 }
@@ -106,10 +106,10 @@ function toggleVideo(localStream) {
   toggleBtn($("#video-btn")); // toggle button colors
   $("#video-icon").toggleClass('fa-video').toggleClass('fa-video-slash'); // toggle the video icon
   if ($("#video-icon").hasClass('fa-video')) {
-    localStream.enableVideo(); // enable the local video
+    localStream.unmuteVideo(); // enable the local video
     toggleVisibility("#no-local-video", false); // hide the user icon when video is enabled
   } else {
-    localStream.disableVideo(); // disable the local video
+    localStream.muteVideo(); // disable the local video
     toggleVisibility("#no-local-video", true); // show the user icon when video is disabled
   }
 }
