@@ -8,6 +8,6 @@ This is a group video chat web app that uses [Agora.io](https://www.agora.io) to
 - An understanding of HTML/CSS/JS 
 - An understand of how Bootstrap and JQuery function _(minimal knowledge needed)_
 
-Read the full tutorail on Medium: [Building a group video chat app](https://medium.com/agora-io/building-a-group-video-chat-app-bc05e8962c41)
+Read the full tutorial on Medium: [Building a group video chat app](https://medium.com/agora-io/building-a-group-video-chat-app-bc05e8962c41)
 
 Check out the [demo of the code in action](https://agoraio-community.github.io/group-video-chat/) on GitHub Pages
