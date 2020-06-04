@@ -853,7 +853,7 @@ function generateToken() {
 Let’s drop our JS includes into our html page to make the final connections. The below snippet fits into the main html (above) by replacing the comment <!-- JS Includes go here --> with the snippet below.
 
 ```
-<script src="https://cdn.agora.io/sdk/web/AgoraRTCSDK-2.8.0.js"></script>
+<script src="AgoraRTCSDK-3.1.1.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 <script>
