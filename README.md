@@ -877,9 +877,9 @@ Once the server is ready we can run our test.
 >NOTE: use two (or more) browser tabs to simulate a local host and a single/multiple remote host(s).
 
 ## Fin. ##
-And just like that we are done! In-case you weren’t coding along or want to see the finished product all together, I have posted [the project code on GitHub](https://github.com/digitallysavvy/group-video-chat).
+And just like that we are done!
 
-If you would like to see the demo in action, [check it out on Heroku](https://agora-group-video-chat.herokuapp.com).
+If you would like to see the demo in action, check out the [demo of the code in action](https://digitallysavvy.github.io/group-video-chat/) on GitHub Pages 
 
 >Please note: that due to high demand, I have updated the build so you will need to register for a free Agora.io account to get AppId to test the demo. If you need help, I have a quick 3 step guide
 
