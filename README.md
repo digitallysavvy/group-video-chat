@@ -16,7 +16,7 @@ Given today’s fragmented JS landscape, I wanted to write this tutorial using t
 ## Core Structure (HTML) ##
 Let’s start by laying out our basic html structure. There are a few UI elements we must have, such as the local video stream, the remote video streams, a toolbar that will contain buttons for toggling audio/video streams, a button to share our screen with the group, and lastly a way to leave the chat *(we’ll add the buttons a little later)*.
 
-```
+```HTML
 <html lang="en">
   <head>
     <title>Agora Group Video Chat Demo</title>
@@ -54,7 +54,7 @@ Let’s start by laying out our basic html structure. There are a few UI element
 ## Adding in CSS and JS ##
 Now that we have our base we can start expanding. Using Bootstrap for our CSS we can quickly style our html with a few simple classes. In the above code, let's add the CSS links *(shown below)* into the code where we see the comment block `<!-- CSS includes go here -->`.
 
-```
+```HTML
 <!-- Bootstrap and Font Awesome CSS Libraries -->
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
@@ -65,7 +65,7 @@ While Boostrap is great but it isn’t a holistic solution, so I threw in a few 
 
 As I mentioned, Bootstrap is great, but sometimes you still need a little bit of custom CSS. Here are the styling blocks for the above referenced `style.css`.
 
-```
+```CSS
 #buttons-container {
   position: absolute;
   z-index: 2;  
@@ -159,7 +159,7 @@ The sections below fits in with the code above by replacing the comments
 `<!-- insert button to share screen -->` and
 `<!-- insert buttons to toggle audio/video and leave/end call -->`
 
-```
+```HTML
 <div id="screen-share-btn-container" class="col-2 float-right text-right mt-2">
 	<button id="screen-share-btn"  type="button" class="btn btn-lg">
 		<i id="screen-share-icon" class="fas fa-share-square"></i>
@@ -186,7 +186,7 @@ The sections below fits in with the code above by replacing the comments
 
 We need to add some JS to control the buttons. JQuery will really help us here by simplifying the code for the various DOM operations which will allow the UI to feel dynamic for the user.
 
-```
+```Javascript
 // UI buttons
 function enableUiControls(localStream) {
 
@@ -298,7 +298,7 @@ As you can see there is some added logic for keyboard controls. During testing I
 
 I saved the above code into a file `ui.js` to keep it separate from the core video chat logic that we will write. Also let’s make sure to include the `ui.js` file within our html file *(using the snippet below)*.
 
-```
+```HTML
 <script src="ui.js"></script>
 ```
 
@@ -307,7 +307,7 @@ Now that we the HTML/DOM structure laid out we can add in the JS. I chose to use
 
 Below I included some of the initial object declarations for the screen sharing. I will expand upon that implementation later on, as we add in the rest of the logic.
 
-```
+```Javascript
 // app / channel settings
 var agoraAppId = ""; // Set your Agora App ID
 var channelName = 'agora-web-docs-demo';
@@ -445,7 +445,7 @@ One thing to note, all the Agora.io SDK event listeners should be at the top lev
 
 As you can see within the code above we have the `'stream-added'` callback, this is where we will add logic to handle setting the first remote stream to the full screen video and every subsequent stream into a new div container within the remote-streams div which will give us the group functionality beyond just 1 to 1 video. Below is the function we would call every time a new remote stream is added and we want to have it add itself dynamically to the DOM.
 
-```
+```Javascript
 // REMOTE STREAMS UI
 function addRemoteStreamMiniView(remoteStream){
   var streamId = remoteStream.getId();
@@ -469,7 +469,7 @@ One last note for this section, we have buttons that toggle the mic and video st
 ## Enhancing the UI by handling remote stream actions ##
 First let’s start by adding some extra divs with icons for a muted mic and a user icon when the video feed is disabled. I will use the local container as a reference as the remote stream containers will have similar structure.
 
-```
+```HTML
 <div id="local-stream-container" class="col p-0">
   <div id="mute-overlay" class="col">
     <i id="mic-icon" class="fas fa-microphone-slash"></i>
@@ -483,7 +483,7 @@ First let’s start by adding some extra divs with icons for a muted mic and a u
 
 The new divs will hold some FontAwesome icons that we can hide/show whenever the event callbacks are executed for on the local and corresponding remote streams. Now that we have some names for our elements we can easily control them within our event listeners.
 
-```
+```Javascript
 // show mute icon whenever a remote has muted their mic
 client.on("mute-audio", function (evt) {
   toggleVisibility('#' + evt.uid + '_mute', true);
@@ -510,7 +510,7 @@ client.on("unmute-video", function (evt) {
 ## More frills ##
 There’s a few effects that we can add to really enhance the user experience. First let’s consider what happens when the user wants a different stream to be the full screen. We’ll add a double click listener to each remote stream so when the user double clicks a remote stream it swaps the mini view with the full screen view.
 
-```
+```Javascript
 var containerId = '#' + streamId + '_container';
 $(containerId).dblclick(function() {
   // play selected container as full screen - swap out current full screen stream
@@ -525,7 +525,7 @@ $(containerId).dblclick(function() {
 
 Lastly let’s make sure that there is always a full screen stream as long as at least one stream is connected. We can use some similar methods as we did above.
 
-```
+```Javascript
 // remove the remote-container when a user leaves the channel
 client.on("peer-leave", function(evt) {
   var streamId = evt.stream.getId(); // the the stream id
@@ -553,7 +553,7 @@ I added some randomization so when the the full screen remote stream leaves the 
 ## Putting it all together ##
 Now that we have all these snippets lets put them together and fill in the rest of the logic for how the web app should react to each event.
 
-```
+```Javascript
 // simple JS interface for Agora.io web SDK
 
 // app / channel settings
