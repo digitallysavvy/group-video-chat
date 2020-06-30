@@ -3,7 +3,7 @@ This is a group video chat web app that uses [Agora.io](https://www.agora.io) to
 
 ## Pre Requisites
 - [A simple web server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server) (I like to use [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer))
-- An SSL cert or way to have an https connection (I use [ngrok](https://ngrok.com))
+- An SSL certificate or way to have an https connection (I use [ngrok](https://ngrok.com))
 - A developer account with [Agora.io](https://www.agora.io)
 - An understanding of HTML/CSS/JS 
 - An understand of how Bootstrap and JQuery function _(minimal knowledge needed)_
