@@ -29,7 +29,9 @@ function enableUiControls(localStream) {
     if(screenShareActive){
       stopScreenShare();
     } else {
-      initScreenShare(); 
+      var agoraAppId = $('#form-appid').val();
+      var channelName = $('#form-channel').val();
+      initScreenShare(agoraAppId, channelName); 
     }
   });
 

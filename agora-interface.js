@@ -154,10 +154,10 @@ function createCameraStream(uid) {
 }
 
 // SCREEN SHARING
-function initScreenShare() {
+function initScreenShare(agoraAppId, channelName) {
   screenClient.init(agoraAppId, function () {
     console.log("AgoraRTC screenClient initialized");
-    joinChannelAsScreenShare();
+    joinChannelAsScreenShare(channelName);
     screenShareActive = true;
     // TODO: add logic to swap button
   }, function (err) {
@@ -165,7 +165,7 @@ function initScreenShare() {
   });  
 }
 
-function joinChannelAsScreenShare() {
+function joinChannelAsScreenShare(channelName) {
   var token = generateToken();
   var userID = null; // set to null to auto generate uid on successfull connection
   screenClient.join(token, channelName, userID, function(uid) { 
@@ -177,7 +177,6 @@ function joinChannelAsScreenShare() {
       audio: false, // Set the audio attribute as false to avoid any echo during the call.
       video: false,
       screen: true, // screen stream
-      extensionId: 'minllpmhdgpndnkomcoccfekfegnlikg', // Google Chrome:
       mediaSource:  'screen', // Firefox: 'screen', 'application', 'window' (select one)
     });
     screenStream.setScreenProfile(screenVideoProfile); // set the profile of the screen
