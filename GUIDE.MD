@@ -8,7 +8,7 @@ Given today’s fragmented JS landscape, I wanted to write this tutorial using t
 
 ## Pre Requisites ##
 - A [simple web server](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server) — I like to use [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
-- An SSL cert or way to have an https connection (I use [ngrok](https://ngrok.com))
+An SSL certificate or way to have an https connection (I use [ngrok](https://ngrok.com))
 - A developer account with [Agora.io](https://console.agora.io)
 - An understanding of HTML/CSS/JS
 - An understanding of how Bootstrap and JQuery function *(minimal knowledge needed)*
