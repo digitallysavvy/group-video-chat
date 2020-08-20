@@ -1,4 +1,5 @@
 # Group Video Chat Web App
+![](https://miro.medium.com/max/1400/1*XEu9XT-U1RKmuTtz8k3qMQ.png)
 This is a simple group video chat web app, very similar to Google Hangouts, Skype or whichever other video chat platform you prefer.
 
 ## Hosted Demo ##
