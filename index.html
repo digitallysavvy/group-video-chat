@@ -48,34 +48,39 @@
 				</div>
 			</div>
 		</div>
-		<!-- Modal -->
-		<div class="modal fade" id="modalForm">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header text-center">
-						<h4 class="modal-title w-100 font-weight-bold">Join Channel</h4>
-						<button type="button" class="close" data-dismiss="modal">
-							<span>&times;</span>
-						</button>
-					</div>
-					<div class="modal-body mx-3">
-						<div class="md-form mb-5">
-							<input type="text" id="form-appid" class="form-control">
-							<label for="form-appid">Agora AppId</label>
-						</div>
-		
-						<div class="md-form mb-4">
-							<input type="text" id="form-channel" class="form-control">
-							<label for="form-channel">Channel</label>
-						</div>
-		
-					</div>
-					<div class="modal-footer d-flex justify-content-center">
-						<button id="join-channel" class="btn btn-default">Join Channel</button>
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="modal fade" id="modalForm">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Join Channel</h4>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body mx-3">
+            <div class="md-form mb-4">
+              <input type="text" id="form-appid" class="form-control">
+              <label for="form-appid">Agora AppId</label>
+            </div>
+            <div class="md-form mb-4">
+              <input type="text" id="form-token" class="form-control">
+              <label for="form-token">Agora Token</label>
+            </div>
+            <div class="md-form mb-4">
+              <input type="text" id="form-channel" class="form-control">
+              <label for="form-channel">Channel</label>
+            </div>
+            <div class="md-form mb-4">
+              <input type="number" id="form-uid" class="form-control" value="1001" data-decimals="0"/>
+              <label for="form-uid">UID</label>
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button id="join-channel" class="btn btn-default">Join Channel</button>
+          </div>
+        </div>
+      </div>
+    </div>
 	</body>
 	<script src="AgoraRTCSDK-3.1.1.js"></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
@@ -90,6 +95,17 @@
 
 		$(document).ready(function(){
 			$("#modalForm").modal("show");
+		});
+	</script>
+	<script type="text/javascript">
+		// init the session when user clicks join btn
+		$( "#join-channel" ).click(function( event ) {
+			var agoraAppId = $('#form-appid').val();
+			var token = $('#form-token').val();
+			var channelName = $('#form-channel').val();
+			var uid = $("#form-uid").val();
+			$("#modalForm").modal("hide");
+			initClientAndJoinChannel(agoraAppId, token, channelName, uid);
 		});
 	</script>
 	<script src="ui.js"></script>
