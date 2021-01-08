@@ -24,6 +24,8 @@ var localStreams = {
   }
 };
 
+AgoraRTC.Logger.enableLogUpload(); // auto upload logs
+
 var mainStreamId; // reference to main stream
 var screenShareActive = false; // flag for screen share 
 
