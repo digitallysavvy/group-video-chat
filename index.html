@@ -103,7 +103,7 @@
 			var agoraAppId = $('#form-appid').val();
 			var token = $('#form-token').val();
 			var channelName = $('#form-channel').val();
-			var uid = $("#form-uid").val();
+			var uid = parseInt($("#form-uid").val());
 			$("#modalForm").modal("hide");
 			initClientAndJoinChannel(agoraAppId, token, channelName, uid);
 		});
