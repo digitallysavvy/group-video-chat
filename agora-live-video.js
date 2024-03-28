@@ -1,18 +1,10 @@
 // Import the Agora SDK
 import AgoraRTC from 'agora-rtc-sdk-ng'
 
-
 const appid = import.meta.env.VITE_AGORA_APP_ID
 const cameraVideoPreset = '360p_7'          // 480 x 360p - 15fps @ 320 Kps
 const audioConfigPreset = 'music_standard'  // 48kHz mono @ 40 Kbps
 const screenShareVideoPreset = '1080_3'     // 1920 x 1080 - 30fps @ 3150 Kps
-
-const joinform = getById('join-channel-form')
-
-// helper function to quickly get dom elements
-function getById(divID) {
-  return document.getElementById(divID)
-}
 
 // Create the Agora Client
 const client = AgoraRTC.createClient({ 
@@ -32,20 +24,12 @@ const localTracks = {
   }
 }
 
-const localTrackState = {
+const localTrackActive = {
   audio: false,
   video: false,
   screen: false
 }
 
-const localDevives = {
-  mics: [],
-  cameras: [],
-  output: []
-}
-
-// let screenshareClient               // Create Screen Share client as needed
-let screenShareIsActive = false     // Screen Share flag
 let remoteUsers = {}                // Container for the remote streams
 let mainStreamUid = null            // Reference for video in the full screen view
 
@@ -60,25 +44,25 @@ const Loglevel = {
 AgoraRTC.enableLogUpload()                       // Auto upload logs to Agora
 AgoraRTC.setLogLevel(Loglevel.DEBUG)             // Set Loglevel
 
-// TODO: Add support for audience and url-params
-
-async function initDevices() {
-  if (!localTracks.camera.audio || !localTracks.camera.video) {
-    [ localTracks.camera.audio, localTracks.camera.video ] = await AgoraRTC.createMicrophoneAndCameraTracks({ audioConfig: audioConfigPreset, videoConfig: cameraVideoPreset })
-  }
-  localDevives.mics = await AgoraRTC.getMicrophones()         // Get the Mic Devices
-  localDevives.cameras = await AgoraRTC.getCameras()          // Get the Camera Devices
-  localDevives.output = await AgoraRTC.getPlaybackDevices()   // Get the Output Devices (speakers, headphones)
-  
-  // TODO: append local devices to drop downs for user to switch devices
-
-  localTracks.camera.video.play('local-video')    // Play the local video track in the local-video div
+// helper function to quickly get dom elements
+function getById(divID) {
+  return document.getElementById(divID)
 }
 
+// Listen for page loaded event
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('page-loaded')
+  addAgoraEventListeners()                          // Add the Agora Event Listeners
+  addLocalMediaControlListeners()                   // Add listeners to local media buttons
+  const joinform = getById('join-channel-form')     // Get the join channel form
+  joinform.addEventListener('submit', handleJoin)   // Add the function to handle form submission
+  showOverlayForm(true)                             //Show the overlay form
+})
+
 // User Form Submit Event
-joinform.addEventListener('submit', async function(e){
-  e.preventDefault() // stop the page from reloading
-  
+const handleJoin = async (event) => {
+  // stop the page from reloading
+  event.preventDefault()                            
   // Get the channel name from the form input and remove any extra spaces
   const channelName = getById('form-channel-name').value.trim()
   // Check if the channel name is empty  
@@ -96,9 +80,16 @@ joinform.addEventListener('submit', async function(e){
   await client.join(appid, channelName, token, uid)
   await client.publish([localTracks.camera.audio, localTracks.camera.video])
   // track audio state locally
-  localTrackState.audio = true
-  localTrackState.video = true
-})
+  localTrackActive.audio = true
+  localTrackActive.video = true
+}
+
+async function initDevices() {
+  if (!localTracks.camera.audio || !localTracks.camera.video) {
+    [ localTracks.camera.audio, localTracks.camera.video ] = await AgoraRTC.createMicrophoneAndCameraTracks({ audioConfig: audioConfigPreset, videoConfig: cameraVideoPreset })
+  }
+  localTracks.camera.video.play('local-video')    // Play the local video track in the local-video div
+}
 
 // Add client Event Listeners -- on page load
 const addAgoraEventListeners = () => {
@@ -152,9 +143,10 @@ const handleRemotUserUnpublished = async (user, mediaType) => {
   if (mediaType === 'video') {
     // Check if its the full screen user
     if (uid === mainStreamUid) {
+      // check if anyone else is in the channel
       if(Object.keys(remoteUsers).length > 0) {
-        // If there is more than one users
-        if(Object.keys(remoteUsers).length > 1) {
+         // If there is more than one users
+         if(Object.keys(remoteUsers).length > 1) {
           // Find a user and switch them to the full-screen
           let randomUid = getRandomRemoteUserUid()
           while (randomUid == mainStreamUid) {
@@ -162,7 +154,8 @@ const handleRemotUserUnpublished = async (user, mediaType) => {
           }
           await setNewMainVideo(randomUid)
         } else {
-          await setNewMainVideo(remoteUsers[0])           // If only one other person make them the main
+          const newMainUid = Object.keys(remoteUsers)[0]
+          await setNewMainVideo(newMainUid[0])           // If only one other person make them the main
         }
       } else{
         getById('full-screen-video').replaceChildren()    // Remove all children of the main div
@@ -193,15 +186,15 @@ const addLocalMediaControlListeners = () => {
 }
 
 const handleMicToggle = async (event) => {
-  const isTrackActive = localTrackState.audio                               // Get current audio state
+  const isTrackActive = localTrackActive.audio                               // Get current audio state
   await muteTrack(localTracks.camera.audio, isTrackActive, event.target)    // Mute/Unmute
-  localTrackState.audio = !isTrackActive                                    // Invert the audio state
+  localTrackActive.audio = !isTrackActive                                    // Invert the audio state
 }
 
 const handleVideoToggle = async (event) => {
-  const isTrackActive = localTrackState.video                               // Get current video state
+  const isTrackActive = localTrackActive.video                               // Get current video state
   await muteTrack(localTracks.camera.video, isTrackActive, event.target)    // Mute/Unmute
-  localTrackState.video = !isTrackActive                                    // Invert the video state
+  localTrackActive.video = !isTrackActive                                    // Invert the video state
 }
 
 // Single function to mute audio/video tracks, using their common API
@@ -213,7 +206,7 @@ const muteTrack = async (track, mute, btn) => {
 }
 
 const handleScreenShare = () => {
-  if (screenShareIsActive) {
+  if (localTrackActive.screen) {
     stopScreenShare()
   } else {
     startScreenShare()
@@ -246,13 +239,13 @@ const startScreenShare = async () => {
   const videoToggleBtn = getById('video-toggle')
   videoToggleBtn.disabled = true
   await muteTrack(localTracks.camera.video, true, videoToggleBtn)
-  localTrackState.video = false
+  localTrackActive.video = false
   
   // publish the new screen tracks
   await client.publish(tracks);
   
   // set screen-share flag and play on full-screen
-  screenShareIsActive = true
+  localTrackActive.screen = true
   localTracks.screen.video.play('full-screen-video');
 
   // Listen for screen share ended event (from browser ui button)
@@ -273,10 +266,10 @@ const stopScreenShare = async () => {
   // publish the local video
   const videoToggleBtn = getById('video-toggle')
   await muteTrack(localTracks.camera.video, false, videoToggleBtn)
-  localTrackState.video = true
+  localTrackActive.video = true
   await client.publish(localTracks.camera.video);
   videoToggleBtn.disabled = false
-  screenShareIsActive = false
+  localTrackActive.screen = false
   // ui clean-up
   getById('full-screen-video').replaceChildren()    // Remove all children of the main div
   setNewMainVideo(mainStreamUid)
@@ -310,8 +303,10 @@ const handleLeaveChannel = async () => {
 // create the remote user container and video player div
 const createRemoteUserDiv = async (uid) => {
   console.log(`add remote user div for uid: ${uid}`)
+  // create a container for the remote video stream
   const containerDiv = document.createElement('div')
   containerDiv.id = `remote-user-${uid}-container`
+  // create a div to display the video track
   const remoteUserDiv = document.createElement('div')
   remoteUserDiv.id = `remote-user-${uid}-video`
   remoteUserDiv.classList.add('remote-video')
@@ -319,7 +314,7 @@ const createRemoteUserDiv = async (uid) => {
   // Add remote user to remote video container
   getById('remote-video-container').appendChild(containerDiv)
 
-  // Double click to swap container with main div
+  // Listen for double click to swap container with main div
   containerDiv.addEventListener('dblclick', async (e) => {
     await swapMainVideo(uid)
   })
@@ -330,7 +325,7 @@ const removeRemoteUserDiv = async (uid) => {
   const containerDiv = getById(`remote-user-${uid}-container`)
   if (containerDiv) {
     containerDiv.parentNode.removeChild(containerDiv)
-  }
+  } 
 }
 
 // check if the main-screen is empty
@@ -339,12 +334,12 @@ const mainIsEmpty = () => {
 }
 
 const setNewMainVideo = async (newMainUid) => {
-  getById('full-screen-video').replaceChildren()  // clear the main div
-  if (!newMainUid) return                         // Exit early if newMainUid is undefined
-  await removeRemoteUserDiv(newMainUid)
+  getById('full-screen-video').replaceChildren()                 // clear the main div
+  if (!newMainUid) return                                        // Exit early if newMainUid is undefined
+  await removeRemoteUserDiv(newMainUid)                          // remove the div from the remote user's container
+  remoteUsers[newMainUid].videoTrack.play('full-screen-video')   // play the remote video in the full screen div
+  mainStreamUid = newMainUid                                     // Set the new uid as the mainUid
   console.log(`newMainUid: ${newMainUid}`)
-  remoteUsers[newMainUid].videoTrack.play('full-screen-video')
-  mainStreamUid = newMainUid
 }
 
 const swapMainVideo = async (newMainUid) => {
@@ -378,11 +373,5 @@ const showOverlayForm = (show) => {
   }
 }
 
-// Listen for page loaded event
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('page-loaded')
-  showOverlayForm(true)
-  addAgoraEventListeners()
-  addLocalMediaControlListeners()
-})
+
 
