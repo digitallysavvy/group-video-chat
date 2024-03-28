@@ -1,6 +1,5 @@
-import './style.css'
-// import agoraLogo from '/agora-logo.svg'
-import AgoraRTC, { IAgoraRTC } from 'agora-rtc-sdk-ng'
+// Import the Agora SDK
+import AgoraRTC from 'agora-rtc-sdk-ng'
 
 
 const appid = import.meta.env.VITE_AGORA_APP_ID
