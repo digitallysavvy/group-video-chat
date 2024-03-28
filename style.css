@@ -1,3 +1,130 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  /* background-color: #242424; */
+  background-color: #FFF;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #099DFD;
+}
+
+body {
+  margin: 0;
+  /* display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh; */
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #099DFDaa);
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: #099DFD;
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/*  */
+#container {
+  width: 100vw;
+  height: 100vh;
+  /* overflow: hidden;
+  position: absolute; */
+}
+
+/* media controls */
+#local-media-controls {
+  width: 100vw;
+  position: absolute;
+  bottom: 0;
+  background: #fff;
+  padding: 10px 0;
+  display: none;
+}
+
+#local-media-controls button {
+  margin: 0 5px;
+}
+
+.media-active {
+  background-color: #1a1a1a;
+}
+
+/* only show hover if button not focused */
+.media-active:hover:not(:focus) {
+  background-color: #FFF;
+  color: #cd3333;
+  border: 1px solid #cd3333;
+}
+
+.muted{
+  background: #b62b2b;
+}
+
+/* only show hover if button not focused */
+.muted:hover:not(:focus) {
+  background-color: #b62b2b73;
+  color: #1a1a1a;
+  border: 1px solid #1a1a1a;
+}
+
+/* UI */
 
 #buttons-container {
   position: absolute;
@@ -11,36 +138,47 @@
   height: 100vh;
 }
 
-#lower-video-bar {
-  height: 20vh;
-}
-
-#local-stream-container { 
-  position: relative; 
-  display: inline-block;
-}
-
-.remote-stream-container { 
-  display: inline-block;
-}
-
-#remote-streams {
-  height: 100%;
+#local-video-container { 
+  position: absolute; 
+  float: right;
+  bottom: 27px;
+  right: 10px;
+  width: 360px;
+  height: 270px;
 }
 
 #local-video {
   position: absolute;
   z-index: 1;
-  height: 20vh;
-  max-width: 100%;
+  width: 360px;
+  height: 270px;
+}
+
+#local-video div {
+  border-radius: 10px;
+}
+
+#remote-video-container {
+  position: absolute;
+  width: 100vw;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 10px;
+  background-color: #000;
+  overflow-x: scroll;
+  overflow-y: hidden;
 }
 
 .remote-video {
-  position: absolute;
-  z-index: 1;
-  height: 100% !important;
-  width: 80%;
-  max-width: 500px;
+  width: 20vw;
+  max-width: 312px;
+  min-width: 0;
+  aspect-ratio: 1.33;
 }
 
 #mute-overlay {
@@ -81,4 +219,88 @@
 
 #screen-share-btn-container {
   z-index: 99;
+}
+
+/* Join Channel Modal */
+#overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+  display: none;
+  opacity: 0;
+  z-index: -10;
+  transition: opacity 0.5s ease;
+}
+
+.show {
+  display: block;
+  opacity: 1;
+  z-index: 10;
+}
+
+#overlay > * {
+  margin: 0 0 25px;
+  color: #2d2929;
+}
+
+#modal-overlay button[type=submit]{
+  max-width: 20vw;
+  margin: 0 auto;
+}
+
+#modal-container {
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  max-width: 650px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 25px;
+} 
+
+#modal-header, #modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#modal-body {
+  margin: 20px 0;
+}
+
+.form-group {
+  margin: 0 0 20px;
+}
+
+.form-control {
+  width: 95%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #000;
+  border-radius: 5px;
+}
+
+#join-channel-btn {
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: #099DFD;
+  color: #FFF;
+  border: 2px solid #FFF;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+#join-channel-btn:hover {
+  background-color: #FFF;
+  color: #099DFD;
+  border: 2px solid #099DFD;
+  border-radius: 5px;
 }
