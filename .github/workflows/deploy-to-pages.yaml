@@ -22,8 +22,7 @@ concurrency:
 
 # 👇 global env
 env:
-  VITE_INTERNAL: true  
-  VITE_AGORA_APP_ID: ${{env.VITE_AGORA_APP_ID}}
+  VITE_AGORA_APP_ID: ${{ vars.VITE_AGORA_APP_ID }}
 
 jobs:
   # Single deploy job since we're just deploying
