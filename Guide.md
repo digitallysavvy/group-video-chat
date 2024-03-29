@@ -1,8 +1,8 @@
 # Group Video Chat Web App
 ![](https://miro.medium.com/max/1400/1*XEu9XT-U1RKmuTtz8k3qMQ.png)
-Let's walk through how to build a simple group video chat web app, very similar to Google Hangouts, Skype or whichever other video chat platform you prefer. 
+Let's walk through how to build a simple group video chat web app similar to Google Hangouts, Skype, or whichever other video chat platform you prefer. 
 
-Given today’s fragmented JS landscape, I wanted to write this tutorial using the HTML, CSS and vanilla JS. In this guide we will be using Vite for our dev environment.
+Given today’s fragmented JS landscape, I wanted to write this tutorial using HTML, CSS, and vanilla JS. In this guide we will be using Vite for our dev environment.
 
 <!-- >For the TLDR crowd: Check out the [demo of the code in action](https://digitallysavvy.github.io/group-video-chat/) on GitHub Pages  -->
 
@@ -14,7 +14,7 @@ Given today’s fragmented JS landscape, I wanted to write this tutorial using t
 
 ## Setup Dev Environment
 
-We are going to use Vite to handle the dev environment. Open the terminal and navigate to your dev folder, and use NPM to create our project.
+We are going to use Vite to handle the dev environment. Open the terminal, navigate to your dev folder, and use NPM to create our project.
 
 ```bash
 npm create vite@latest
@@ -24,7 +24,7 @@ Follow the Vite instructions: give your project a name `agora-group-video-chat`,
 
 
 ## Core Structure (HTML) 
-Let’s start by laying out our basic html structure. There are a few UI elements we must have, such as the local video, the remote videos, a toolbar that contains buttons for muting and unmuting the audio/video, a button to screen-share, and a way to button to leave the chat. Open the [`index.html`](index.html) file and replace it with the code below.
+Let’s start by laying out our basic html structure. There are a few UI elements we must have, such as the local video, the remote videos, a toolbar that contains buttons for muting and unmuting the audio/video, a button to screen-share, and a button to leave the chat. Open the [`index.html`](index.html) file and replace it with the code below.
 
 ```HTML
 <!doctype html>
@@ -79,7 +79,7 @@ Let's take a look at the [`index.html`](index.html) page. The body contains two 
 
 Let's start with the `container`, it wraps the three divs used to display the local and remote video streams, along with the media controls. Working our way from the top down, the `full-screen-video` div is for playing one of the remote users in full-screen mode. The `remote-video-container` is for dynamically adding/removing the remote video tracks as they are published into the channel. The `local-video-container` to display the local user's camera. Lastly, the `local-media-controls` which contains the buttons to control muting and unmuting the mic and camera tracks, starting and stopping the screen-share, and leaving the channel.
 
-Now looking at the `overlay` we can see its a simple modal with an embeded form, a single input for the `Channel Name`, and a button to `Join Channel`. We're going to use the `Channel Name` as a way of grouping users together into the same video chat.
+Now looking at the `overlay` we can see it's a simple modal with an embedded form, a single input for the `Channel Name`, and a button to `Join Channel`. We're going to use the `Channel Name` as a way of grouping users together into the same video chat.
 
 ## Adding in CSS and JS
 Now that we have our html set up, we can drop in some simple html styles. Open the `style.css` file and add this CSS below the existing CSS.
@@ -269,15 +269,15 @@ Now that we have our html set up, we can drop in some simple html styles. Open t
 ```
 
 ## Core Structure (JS)
-Now that we the HTML/DOM structure laid out we can add in the JS. We'll use [Agora's Video SDK](https://www.agora.io/en/products/video-call/) to simplify the build and allow us to build scalable real-time video applications. The Agora SDK is pretty straight forward in how it works: you initialize the SDK, create a Client, use that Client to connect to an Agora Channel, and then use the client to publish the mic and camera streams into the channel.
+Now that we have the HTML/DOM structure laid out we can add in the JS. We'll use [Agora's Video SDK](https://www.agora.io/en/products/video-call/) to simplify the build and allow us to build scalable real-time video applications. The Agora SDK is pretty straight forward in how it works: you initialize the SDK, create a Client, use that Client to connect to an Agora Channel, and then use the Client to publish the mic and camera streams into the channel.
 
-In the code below we start by importing the `AgoraRTC` object from the the Agora SDK. Next we set up a constant for our Agora App ID and load that value from our environment file. Next we'll use `cameraVideoPreset` to set the video profile for the local camera stream, we'll set similar profiles for the `audioConfigPreset` and the `screenShareVideoPreset`. [Full list of presets](https://api-ref.agora.io/en/video-sdk/web/4.x/globals.html#videoencoderconfigurationpreset) from the Agora Documentation. 
+In the code below, we start by importing the `AgoraRTC` object from the Agora SDK. Next, we set up a constant for our Agora App ID and load that value from our environment file. Next, we'll use `cameraVideoPreset` to set the video profile for the local camera stream, we'll set similar profiles for the `audioConfigPreset` and the `screenShareVideoPreset`. [Full list of presets](https://api-ref.agora.io/en/video-sdk/web/4.x/globals.html#videoencoderconfigurationpreset) from the Agora Documentation. 
 
-Next we declare and instatiate an Agora Client, with an initial config of `vp9` for the codec, we'll set the mode to `live` and the role to `host`, but you can also set the mode to `rtc` and omit the role. 
+Next we declare and instantiate an Agora Client, with an initial config of `vp9` for the codec, we'll set the mode to `live` and the role to `host`, but you can also set the mode to `rtc` and omit the role. 
 
-Agora's 4.x SDK organized the audio and video streams into `tracks` to more closely align with the WebRTC equivilants. To keep  our local tracks organized, create an object `localTracks` and create the structure to store a reference to audio, video tracks from the mic, camera, and a/v from the screen-share. The Agora SDK provides a way to check if the track is active, but that function samples the mic/camera tracks over a period of time to check for activity. This check is relatively fast when the stream is active so mute is quick but the function is slow to return when the track is muted so it causes a delay when trying to unmute. To make sure the UI is responsive on mute/unmute we'll use `localTrackActive` to keep track of the local mic, camera, and screen-share states. 
+Agora's 4.x SDK organized the audio and video streams into `tracks` to more closely align with the WebRTC equivalents. To keep  our local tracks organized, create an object `localTracks` and create the structure to store a reference to audio, video tracks from the mic, camera, and a/v from the screen-share. The Agora SDK provides a way to check if the track is active, but that function samples the mic/camera tracks over a period of time to check for activity. This check is relatively fast when the stream is active, so mute is quick, but the function is slow to return when the track is muted, so it causes a delay when trying to unmute. To make sure the UI is responsive on mute/unmute, we'll use `localTrackActive` to keep track of the local mic, camera, and screen-share states. 
 
-When new remote users join the channel we'll use an object (`remoteUsers`) to keep track of their video and audio tracks. Each remote user will have an unique id (uid) that we'll use as the keys in the `remoteUsers` object. The variable `mainStreamUid` will keep track of the UID for the remote user that is being displayed in the full screen div.
+When new remote users join the channel we'll use an object (`remoteUsers`) to keep track of their video and audio tracks. Each remote user will have a unique id (uid) that we'll use as the keys in the `remoteUsers` object. The variable `mainStreamUid` will keep track of the UID for the remote user that is being displayed in the full screen div.
 
 ```javascript
 // Import the Agora SDK
@@ -316,7 +316,7 @@ let remoteUsers = {}                // Container for the remote streams
 let mainStreamUid = null            // Reference for video in the full screen view
 ```
 
-Next add a listener for the `DOMContentLoaded` event, so we can add all of our event listeners once the page has loaded. I created a simple function [`getById()`](agora-live-video.js?plain=1#L48) as a short hand for `document.getElementById()`
+Next, add a listener for the `DOMContentLoaded` event, so we can add all of our event listeners once the page has loaded. I created a simple function [`getById()`](agora-live-video.js?plain=1#L48) as a short hand for `document.getElementById()`
 
 ```javascript
 // Listen for page loaded event
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })
 ```
 
-When the page is loaded, add the Agora Event Listeners. The Agora SDK provides a number of events to give the developer full control over the experience. These events notify our client application of varioous events such as when a remote users has joined or left the current channel. 
+When the page is loaded, add the Agora Event Listeners. The Agora SDK provides a number of events to give the developer full control over the experience. These events notify our client application of various events such as when a remote user has joined or left the current channel. 
 
 ```javascript
 // Add client Event Listeners -- on page load
@@ -343,7 +343,7 @@ const addAgoraEventListeners = () => {
 }
 ```
 
-As mentioned the Agora SDK provides many events, but these four events are the core events every live video application needs to have. The first event `user-joined` is triggered when a remote `host` client joins the channel, this event will get triggered when a client joins a channel with existing users. It's worth noting that this event does not get triggered if the client device has its `role` set to `audience`. Conversely the `user-left` event is triggered when the remote client leaves.
+As mentioned, the Agora SDK provides many events, but these four events are the core events every live video application needs to have. The first event `user-joined` is triggered when a remote `host` client joins the channel, this event will get triggered when a client joins a channel with existing users. It's worth noting that this event does not get triggered if the client device has its `role` set to `audience`. Conversely, the `user-left` event is triggered when the remote client leaves.
 
 When a remote `host` user joins we'll add them to our `remoteUsers` object, with their `uid` as the key and the `user` as the value. When the remote user leaves the channel, we'll remove them from our list.
 
@@ -364,7 +364,7 @@ const handleRemotUserLeft = async (user, reason) => {
 
 Moving down the list, we see the `user-published` event. This is triggered when a remote user sends their audio/video streams into a channel. This event will get triggered when a client joins a channel with existing users who are sending out audio and video streams. Conversely, when a user stops sending an audio or video stream the `user-unpublished` event is triggered.
 
-When a new remote video or audio track is detected, we'll want to subscribe to that track using the Agora `cleint`. Regardless of `mediaType` (audio/video) we'll want to play the remote track, so for audio tracks we'll play them directly but if the remote track is a video we'll want to play it on a specific div. So add a check to play the remote video on either the full-screen div or create a new div in the `remote-video-container` using [`createRemoteUserDiv()`](agora-live-video.js?plain=1#L283). When we can the `.play()` on the `user.videoTrack` we pass in the div ID and the Agora SDK appends the video element with the video stream and plays it.
+When a new remote video or audio track is detected, we'll want to subscribe to that track using the Agora `client`. Regardless of `mediaType` (audio/video), we'll want to play the remote track, so for audio tracks, we'll play them directly, but if the remote track is a video, we'll want to play it on a specific div. So, add a check to play the remote video on either the full-screen div or create a new div in the `remote-video-container` using [`createRemoteUserDiv()`](agora-live-video.js?plain=1#L283). Then we can call `.play()` on the `user.videoTrack` we pass in the div ID, and the Agora SDK appends the video element with the video stream and plays it.
 
 When a user unpublishes their stream, Agora will stop playback of the audio and video tracks and will remove the video elements from the DOM, but in the case of video streams, we'll want to update the UI to either remove the user's div from the `remote-video-container` using [`removeRemoteUserDiv`](agora-live-video.js?plain=1#L305) or if the full-screen user unpublished, display a different user in the full-screen div.
 
@@ -405,7 +405,7 @@ const handleRemotUserUnpublished = async (user, mediaType) => {
 }
 ```
 
-Now that we have our core Agora events set up, the next set of listeners we add for the buttons in the `local-media-controls`.
+Now that we have our core Agora events set up, the next set of listeners we add are for the buttons in the `local-media-controls`.
 
 ```javascript
 const addLocalMediaControlListeners = () => {
@@ -447,9 +447,9 @@ const muteTrack = async (track, mute, btn) => {
 
 ```
 
-The next button in the `local-media-controls` is the `screenShareBtn`, which calls `handleScreenShare` to either start or stop the screenshare. The Agora makes screen sharing fairly simple, create a `screenTrack` using `AgoraRTC.createScreenVideoTrack()` and then publish it into the channel like the camera audio/video streams. In browsers that support Audio Sharing (usually as part of sharing a specific tab), the Agora SDK will return both the audio and video tracks. If there's only a video track, the Agora SDK will return only the video. 
+The next button in the `local-media-controls` is the `screenShareBtn`, which calls `handleScreenShare` to either start or stop the screen-share. Agora makes screen sharing fairly simple, create a `screenTrack` using `AgoraRTC.createScreenVideoTrack()` and then publish it into the channel like the camera audio/video streams. In browsers that support Audio Sharing (usually as part of sharing a specific tab), the Agora SDK will return both the audio and video tracks. If there's only a video track, the Agora SDK will return only the video. 
 
-When we publish a screen-share, we need to unpublish the camera stream. The Agora SDK only supports 1 video stream per client. There's a way to have both video and screen published using two Agora clients but that's beyond the scope of this guide. In this guide we'll unpublish the local video from the camera and publish the screen-share track(s) in it's place. When we unpublish the local video track, we'll mute the video localy and disable the button to let the user know that their video is muted. We'll also show the screenshare in the full-screen div, to let the user know their screen is being shared.
+When we publish a screen-share, we need to unpublish the camera stream, since the Agora SDK only supports 1 video stream per client. There's a way to have both video and screen published using two Agora clients but that's beyond the scope of this guide. In this guide, we'll unpublish the local video from the camera and publish the screen-share track(s) in its place. When we unpublish the local video track, we'll mute the video locally and disable the button to let the user know that their video is muted. We'll also show the screen-share in the full-screen div, to let the user know their screen is being shared.
 
 When the screen-share stops, we'll unpublish and close out the screen-share audio/video track(s), then unmute and republish the local camera tracks. Since the screen-share was displayed in the full-screen div, we'll also want to play a remote user in the full-screen div.
 
@@ -526,9 +526,9 @@ const stopScreenShare = async () => {
 
 ```
 
-The last button in the group is the `leaveChannelBtn`. The Agora SDK makes it pretty simple with `client.leave()` but in good practive, we want to stop the local camera, and mic tracks. We'll check if the screen-share is active and stop/unpublish those tracks as well. 
+The last button in the group is the `leaveChannelBtn`. The Agora SDK makes it pretty simple with `client.leave()` but in good practice, we want to stop the local camera and mic tracks. We'll check if the screen-share is active and stop/unpublish those tracks as well. 
 
-Once the local user has successfully left the channel, we'll want to reset the `remote-users` object and all the flags for tracking the active state of the local mic/camera/screen-share. We'll also want to make sure the media controls are back to their starting state, before we hide them and show the Join form overlay. 
+Once the local user has successfully left the channel, we'll want to reset the `remote-users` object and all the flags for tracking the active state of the local mic/camera/screen-share. We'll also want to make sure the media controls are back to their starting state before we hide them and show the Join form overlay. 
 
 ```javascript
 const handleLeaveChannel = async () => {
@@ -573,7 +573,7 @@ const handleLeaveChannel = async () => {
 
 ### Join the Channel
 
-Now that we've added the Agora Events and the button listeners we are ready to show our overlay form and join the channel when the user inputs a channel name. The `handleJoin()` does a few things, first it prevents the form submission from reloading the page, then it gets the value of the `form-channel-name` input, trims the excess spaces and checks to make sure the user has input a value. If the user input a channel name, we hide the overlay form, initialize the local mic and camera devices, then we join the Agora Channel using `client.join()`. Once we've joined the channel we can publish our local mic and camera tracks into the channel and display the `local-media-controls` buttons.
+Now that we've added the Agora Events and the button listeners we are ready to show our overlay form and join the channel when the user inputs a channel name. The `handleJoin()` does a few things, first it prevents the form submission from reloading the page, then it gets the value of the `form-channel-name` input, trims the excess spaces and checks to make sure the user has entered a value. When the user inputs a channel name, we hide the overlay form, initialize the local mic and camera devices, and then join the Agora Channel using `client.join()`. Once we've joined the channel we can publish our local mic and camera tracks into the channel and display the `local-media-controls` buttons.
 
 ```javascript
 // User Form Submit Event
@@ -621,7 +621,7 @@ npm run dev
 ```
 Once the server is running we can open multiple browser tabs and join the same channel to simulate multiple users in the channel and test out the code. 
 
-If you want to test with multiple devices you'll need a way to run the project with a secure `https` connection. You have two options: setup a custom SSL certificate for you local device; or use a service like [ngrok](https://ngrok.com), which creates a tunnel out from your local machine and provides an `https` url.  In my experience this is one of the simplest ways to run a publicly accessible `https` secured webserver on your local machine. 
+If you want to test with multiple devices you'll need a way to run the project with a secure `https` connection. You have two options: setup a custom SSL certificate for your local device; or use a service like [ngrok](https://ngrok.com), which creates a tunnel out from your local machine and provides an `https` url.  In my experience this is one of the simplest ways to run a publicly accessible `https` secured webserver on your local machine. 
 
 ## Fin. 
 And just like that we are done!
