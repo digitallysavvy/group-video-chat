@@ -42,7 +42,7 @@ const Loglevel = {
 }
 
 AgoraRTC.enableLogUpload()                       // Auto upload logs to Agora
-AgoraRTC.setLogLevel(Loglevel.DEBUG)             // Set Loglevel
+AgoraRTC.setLogLevel(Loglevel.ERROR)             // Set Loglevel
 
 // helper function to quickly get dom elements
 function getById(divID) {
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   addLocalMediaControlListeners()                   // Add listeners to local media buttons
   const joinform = getById('join-channel-form')     // Get the join channel form
   joinform.addEventListener('submit', handleJoin)   // Add the function to handle form submission
-  showOverlayForm(true)                             //Show the overlay form
+  showOverlayForm(true)                             // Show the overlay form
 })
 
 // User Form Submit Event
@@ -72,16 +72,16 @@ const handleJoin = async (event) => {
   }
   showOverlayForm(false)                                    // Hide overlay form
   await initDevices()                                       // Initialize the devices and create Tracks
-  getById('local-media-controls').style.display = 'block'   // show media controls (mic, video. screen-share, etc)
 
   // Join the channel and publish out streams
-  const token = null                                // Token security is not enabled
-  const uid = null                                  // Pass null to have Agora set UID dynamically
+  const token = null                                        // Token security is not enabled
+  const uid = null                                          // Pass null to have Agora set UID dynamically
   await client.join(appid, channelName, token, uid)
   await client.publish([localTracks.camera.audio, localTracks.camera.video])
   // track audio state locally
   localTrackActive.audio = true
   localTrackActive.video = true
+  getById('local-media-controls').style.display = 'block'   // show media controls (mic, video. screen-share, etc)
 }
 
 async function initDevices() {
@@ -104,15 +104,13 @@ const addAgoraEventListeners = () => {
 const handleRemotUserJoined = async (user) => {
   const uid = user.uid
   remoteUsers[uid] = user         // add the user to the remote users
-  await createRemoteUserDiv(uid)  // create remote user div
+  console.log(`User ${uid} joined the channel`)
 }
 
 // Remote user leaves the channel
 const handleRemotUserLeft = async (user, reason) => {
   const uid = user.uid
   delete remoteUsers[uid]
-  // Remove user from remote users container
-  await removeRemoteUserDiv(uid)
   console.log(`User ${uid} left the channel with reason:${reason}`)
 }
 
@@ -120,16 +118,15 @@ const handleRemotUserLeft = async (user, reason) => {
 const handleRemotUserPublished = async (user, mediaType) => {
   const uid = user.uid
   await client.subscribe(user, mediaType)
-  remoteUsers[uid] = user                             // update remote user reference
+  remoteUsers[uid] = user                                  // update remote user reference
   if (mediaType === 'video') { 
     // Check if the full screen view is empty
     if (mainIsEmpty()) {
       mainStreamUid = uid
-      user.videoTrack.play('full-screen-video')     // play video on main user div
-      await removeRemoteUserDiv(uid)                // remove the remote div 
+      user.videoTrack.play('full-screen-video')           // play video on main user div
     } else {
-       // play video on remote user div
-       user.videoTrack.play(`remote-user-${uid}-video`) 
+        await createRemoteUserDiv(uid)                    // create remote user div       
+       user.videoTrack.play(`remote-user-${uid}-video`)   // play video on remote user div
     }           
   } else if (mediaType === 'audio') {
     user.audioTrack.play()
@@ -143,32 +140,12 @@ const handleRemotUserUnpublished = async (user, mediaType) => {
   if (mediaType === 'video') {
     // Check if its the full screen user
     if (uid === mainStreamUid) {
-      // check if anyone else is in the channel
-      if(Object.keys(remoteUsers).length > 0) {
-         // If there is more than one users
-         if(Object.keys(remoteUsers).length > 1) {
-          // Find a user and switch them to the full-screen
-          let randomUid = getRandomRemoteUserUid()
-          while (randomUid == mainStreamUid) {
-            randomUid = getRandomRemoteUserUid()
-          }
-          await setNewMainVideo(randomUid)
-        } else {
-          const newMainUid = Object.keys(remoteUsers)[0]
-          await setNewMainVideo(newMainUid[0])           // If only one other person make them the main
-        }
-      } else{
-        getById('full-screen-video').replaceChildren()    // Remove all children of the main div
-      }
+      console.log(`User ${uid} is the main uid`)
+      const newMainUid = getNewUidForMainUser()
+      await setNewMainVideo(newMainUid) 
     } else {
-      const remoteUserPlayer = getById(`remote-user-${uid}-video`)
-      if (remoteUserPlayer){
-        remoteUserPlayer.replaceChildren()                // Remove all children of the div
-      } 
+      await removeRemoteUserDiv(uid)
     }
-    // TODO: show no video icon
-  } else if (mediaType === 'audio') {
-    // TODO: show no mic icon
   }
 }
 
@@ -285,9 +262,23 @@ const handleLeaveChannel = async () => {
       localTracks.camera[trackName] = undefined
     }
   }
-  await client.leave()                                    // Leave the channel
-  console.log("client left channel successfully")  
-  remoteUsers = {}                                        // Reset remote users 
+  // stop the screenshare
+  if (localTrackActive.screen) {
+    let tracks = [localTracks.screen.video]
+    if (localTracks.screen.audio) {
+      tracks = [localTracks.screen.video, localTracks.screen.audio]
+    }
+    await client.unpublish(tracks)
+  }
+  // Leave the channel
+  await client.leave()
+  console.log("client left channel successfully")
+  // Reset remote users 
+  remoteUsers = {} 
+  // reset the active flagss
+  for (const flag in localTrackActive){
+    localTrackActive[flag] = false
+  }
   // Reset the UI
   const mediaButtons = [getById('mic-toggle'), getById('video-toggle')]
   mediaButtons.forEach(btn => {
@@ -302,6 +293,8 @@ const handleLeaveChannel = async () => {
 
 // create the remote user container and video player div
 const createRemoteUserDiv = async (uid) => {
+  const containerDivId = getById(`remote-user-${uid}-container`)
+  if (containerDivId) return
   console.log(`add remote user div for uid: ${uid}`)
   // create a container for the remote video stream
   const containerDiv = document.createElement('div')
@@ -334,7 +327,6 @@ const mainIsEmpty = () => {
 }
 
 const setNewMainVideo = async (newMainUid) => {
-  getById('full-screen-video').replaceChildren()                 // clear the main div
   if (!newMainUid) return                                        // Exit early if newMainUid is undefined
   await removeRemoteUserDiv(newMainUid)                          // remove the div from the remote user's container
   remoteUsers[newMainUid].videoTrack.play('full-screen-video')   // play the remote video in the full screen div
@@ -343,20 +335,34 @@ const setNewMainVideo = async (newMainUid) => {
 }
 
 const swapMainVideo = async (newMainUid) => {
-  if(remoteUsers[mainStreamUid]) {
+  const mainStreamUser = remoteUsers[mainStreamUid]
+  if(mainStreamUser) {
     await createRemoteUserDiv(mainStreamUid)
-    remoteUsers[mainStreamUid].videoTrack.play(`remote-user-${mainStreamUid}-video`)
+    const videoTrack = remoteUsers[mainStreamUid].videoTrack
+    // check if the video track is active
+    if(videoTrack) {
+      videoTrack.play(`remote-user-${mainStreamUid}-video`)
+    }
   }
   await setNewMainVideo(newMainUid)
 }
 
-const getRandomRemoteUserUid = () => {
+const getNewUidForMainUser = () => {
   const allUids = Object.keys(remoteUsers)
   if (allUids.length === 0) return undefined   // handle error-case
   // return a random uid
-  const randomUid = allUids[Math.floor(Math.random() * allUids.length)]
-  console.log(`randomUid: ${randomUid}`)
-  return randomUid
+  const getRandomUid = () => {
+    const randUid = allUids[Math.floor(Math.random() * allUids.length)]
+    console.log(`randomUid: ${randUid}`)
+    return randUid
+  }
+  // make sure the random Uid is not the main uid
+  let newUid = getRandomUid()
+  while (newUid == mainStreamUid) {
+    newUid = getRandomUid()
+  }
+
+  return newUid
 }
 
 // Toggle the visibility of the Join channel form
@@ -372,6 +378,3 @@ const showOverlayForm = (show) => {
     modal.classList.remove('show')
   }
 }
-
-
-
