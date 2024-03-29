@@ -128,7 +128,6 @@ Now that we have our html set up, we can drop in some simple html styles. Open t
 }
 
 /* UI */
-
 #buttons-container {
   position: absolute;
   z-index: 2;  
@@ -183,7 +182,6 @@ Now that we have our html set up, we can drop in some simple html styles. Open t
   min-width: 0;
   aspect-ratio: 1.33;
 }
-
 
 /* Join Channel Modal */
 #overlay {
@@ -271,9 +269,9 @@ Now that we have our html set up, we can drop in some simple html styles. Open t
 ```
 
 ## Core Structure (JS)
-Now that we the HTML/DOM structure laid out we can add in the JS. We'll use [Agora's Video SDK]() to ssave of the time of creating our own WebRTC infrastructure. The Agora SDK is pretty straight forward in how it works: you initialize the SDK, create a Client, use that Client to connect to an Agora Channel, and then use the client to publish the mic and camera streams into the channel.
+Now that we the HTML/DOM structure laid out we can add in the JS. We'll use [Agora's Video SDK](https://www.agora.io/en/products/video-call/) to simplify the build and allow us to build scalable real-time video applications. The Agora SDK is pretty straight forward in how it works: you initialize the SDK, create a Client, use that Client to connect to an Agora Channel, and then use the client to publish the mic and camera streams into the channel.
 
-In the code below we start by importing the `AgoraRTC` object from the the Agora SDK. Next we set up a constant for our Agora App ID and load that value from our environment file. Next we'll use `cameraVideoPreset` to set the video profile for the local camera stream, we'll set similar profiles for the `audioConfigPreset` and the `screenShareVideoPreset`. For the [full list of presets]() take a look at the [Agora Documentation](). 
+In the code below we start by importing the `AgoraRTC` object from the the Agora SDK. Next we set up a constant for our Agora App ID and load that value from our environment file. Next we'll use `cameraVideoPreset` to set the video profile for the local camera stream, we'll set similar profiles for the `audioConfigPreset` and the `screenShareVideoPreset`. [Full list of presets](https://api-ref.agora.io/en/video-sdk/web/4.x/globals.html#videoencoderconfigurationpreset) from the Agora Documentation. 
 
 Next we declare and instatiate an Agora Client, with an initial config of `vp9` for the codec, we'll set the mode to `live` and the role to `host`, but you can also set the mode to `rtc` and omit the role. 
 
