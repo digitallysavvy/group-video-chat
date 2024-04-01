@@ -1,11 +1,13 @@
 # Agora Live Video
 
-![Group Vido Demo](https://github.com/digitallysavvy/group-video-chat/actions/workflows/deploy-to-pages.yaml/badge.svg)
+![Group Video Demo](https://github.com/digitallysavvy/group-video-chat/actions/workflows/deploy-to-pages.yaml/badge.svg)
 
-Pure javascript implmentation of the Agora Video SDK for Web v4.2
-For an walk through of the code: [Guide.md](Guide.md)
+Vanilla javascript implmentation of the Agora Video SDK for Web v4.2
 
-Test the build here: [https://digitallysavvy.github.io/group-video-chat/](https://digitallysavvy.github.io/group-video-chat/)
+A walk-through of the project setup and code: [Guide.md](Guide.md)
+
+## Demo
+Test the build: [https://digitallysavvy.github.io/group-video-chat/](https://digitallysavvy.github.io/group-video-chat/)
 
 ## Setup
 
