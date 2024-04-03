@@ -365,7 +365,7 @@ const getNewUidForMainUser = () => {
   }
   // make sure the random Uid is not the main uid
   let newUid = getRandomUid()
-  while (newUid == mainStreamUid) {
+  while (allUids.length > 1 && newUid == mainStreamUid) {
     newUid = getRandomUid()
   }
 
