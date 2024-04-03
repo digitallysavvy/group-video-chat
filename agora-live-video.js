@@ -202,8 +202,10 @@ const startScreenShare = async () => {
   }
 
   // move the main user from the full-screen div
-  await createRemoteUserDiv(mainStreamUid)
-  remoteUsers[mainStreamUid].videoTrack.play(`remote-user-${mainStreamUid}-video`)
+  if(!mainIsEmpty) {
+    await createRemoteUserDiv(mainStreamUid)
+    remoteUsers[mainStreamUid].videoTrack.play(`remote-user-${mainStreamUid}-video`)
+  }
 
   // publish the tracks
   let tracks = [localTracks.screen.video]
@@ -249,7 +251,12 @@ const stopScreenShare = async () => {
   localTrackActive.screen = false
   // ui clean-up
   getById('full-screen-video').replaceChildren()    // Remove all children of the main div
-  setNewMainVideo(mainStreamUid)
+  if(mainStreamUid) {
+    await setNewMainVideo(mainStreamUid)
+  } else if (Object.keys(remoteUsers) > 0) {
+    const newMainUid = getNewUidForMainUser()
+    await setNewMainVideo(newMainUid) 
+  }
 }
 
 const handleLeaveChannel = async () => {
