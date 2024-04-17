@@ -28,3 +28,18 @@ Test the build: [https://digitallysavvy.github.io/group-video-chat/](https://dig
 ```npm run build```
 4. Upload the contents of the new `dist` folder to your webserver
 5. Make sure the server has your Agora API key set in the environment variables using the env variable `VITE_AGORA_APP_ID=`
+
+## Deploy to GitHub Pages
+This project is setup with a GitHub actions workflow to deploy the project to GitHub pages, if enabled in the project settings. 
+
+To enable GitHub Pages build via GitHub Actions:
+1. Fork the project on GitHub (https://github.com/digitallysavvy/group-live-stream)
+2. Clone the project 
+3. Click the project's Settings tab
+4. Click the Pages tab in the left column menu
+5. Under Build and deployment, select GitHub Actions as the Source
+6. Click the Environments tab in the left column menu
+7. Click github-pages from the Environments list
+8. Click Add variable under the Environment variable section
+9. Set the name `VITE_AGORA_APP_ID` and your Agora AppId as the value.
+10. Update the `vit.config.js` file to update the url if you change the project name
