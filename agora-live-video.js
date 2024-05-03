@@ -88,7 +88,29 @@ async function initDevices() {
   if (!localTracks.camera.audio || !localTracks.camera.video) {
     [ localTracks.camera.audio, localTracks.camera.video ] = await AgoraRTC.createMicrophoneAndCameraTracks({ audioConfig: audioConfigPreset, videoConfig: cameraVideoPreset })
   }
-  localTracks.camera.video.play('local-video')    // Play the local video track in the local-video div
+  // localTracks.camera.video.play('local-video')    // Play the local video track in the local-video div
+  console.log(`Local Camera Track Object ${localTracks.camera.video}`)
+  console.log(localTracks.camera.video)
+  console.log(`-- Media Stream`)
+  console.log(localTracks.camera.video._originMediaStreamTrack)
+  const localVideoDiv = getById('local-video')
+  
+  const videoFromStream = document.createElement('video')
+  videoFromStream.id = 'local-video-stream'
+  videoFromStream.setAttribute('webkit-playsinline', 'webkit-playsinline');
+  videoFromStream.setAttribute('playsinline', 'playsinline');
+  
+  // videoFromStream.srcObject = new MediaStream([localTracks.camera.video.getMediaStreamTrack(), localTracks.camera.audio.getMediaStreamTrack()])
+  videoFromStream.srcObject = new MediaStream([localTracks.camera.video.getMediaStreamTrack()])
+  videoFromStream.controls = false
+  videoFromStream.height = 300
+  videoFromStream.width = 500
+  localVideoDiv.appendChild(videoFromStream);
+
+  videoFromStream.onloadedmetadata = () => {
+    // ready to play video
+    videoFromStream.play();
+  }
 }
 
 // Add client Event Listeners -- on page load
