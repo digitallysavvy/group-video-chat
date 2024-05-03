@@ -22,6 +22,11 @@ npm create vite@latest
 
 Follow the Vite instructions: give your project a name `agora-group-video-chat`, select `Vanilla` as the framework, and select `javascript` as the variant and hit enter. Once the project is set up, open the project folder in your code editor.
 
+### Install the Agora SDK
+With the new project setup, navigate to the project folder in the terminal and use `npm` to install the Agora Video Web SDK
+```bash
+npm i agora-rtc-sdk-ng
+```
 
 ## Core Structure (HTML) 
 Let’s start by laying out our basic html structure. There are a few UI elements we must have, such as the local video, the remote videos, a toolbar that contains buttons for muting and unmuting the audio/video, a button to screen-share, and a button to leave the chat. Open the [`index.html`](index.html) file and replace it with the code below.
@@ -125,13 +130,6 @@ Now that we have our html set up, we can drop in some simple html styles. Open t
   background-color: #b62b2b73;
   color: #1a1a1a;
   border: 1px solid #1a1a1a;
-}
-
-/* UI */
-#buttons-container {
-  position: absolute;
-  z-index: 2;  
-  width: 100vw;
 }
 
 #full-screen-video {
