@@ -121,12 +121,6 @@ button:focus-visible {
 
 /* UI */
 
-#buttons-container {
-  position: absolute;
-  z-index: 2;  
-  width: 100vw;
-}
-
 #full-screen-video {
   position: absolute;
   width: 100vw;
