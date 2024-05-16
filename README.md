@@ -1,12 +1,12 @@
 # Agora Live Video
 
-![Group Video Demo](https://github.com/digitallysavvy/group-video-chat/actions/workflows/deploy-to-pages.yaml/badge.svg)
-
 Vanilla javascript implmentation of the Agora Video SDK for Web v4.2
 
 A walk-through of the project setup and code: [Guide.md](Guide.md)
 
 ## Demo
+![Group Video Demo](https://github.com/digitallysavvy/group-video-chat/actions/workflows/deploy-to-pages.yaml/badge.svg)
+
 Test the build: [https://digitallysavvy.github.io/group-video-chat/](https://digitallysavvy.github.io/group-video-chat/)
 
 ## Setup
@@ -33,8 +33,7 @@ Test the build: [https://digitallysavvy.github.io/group-video-chat/](https://dig
 This project is setup with a GitHub actions workflow to deploy the project to GitHub pages, if enabled in the project settings. 
 
 To enable GitHub Pages build via GitHub Actions:
-1. Fork the project on GitHub (https://github.com/digitallysavvy/group-live-stream)
-2. Clone the project 
+1. Clone or Fork the project (https://github.com/digitallysavvy/group-live-stream)
 3. Click the project's Settings tab
 4. Click the Pages tab in the left column menu
 5. Under Build and deployment, select GitHub Actions as the Source
