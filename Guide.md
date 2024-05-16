@@ -23,7 +23,8 @@ npm create vite@latest
 Follow the Vite instructions: give your project a name `agora-group-video-chat`, select `Vanilla` as the framework, and select `javascript` as the variant and hit enter. Once the project is set up, open the project folder in your code editor.
 
 ### Install the Agora SDK
-With the new project setup, open the project folder in the terminal and use `npm` to install the Agora Video Web SDK
+With the new project setup, navigate to the project folder in the terminal and use `npm` to install the Agora Video Web SDK
+
 ```bash
 npm i agora-rtc-sdk-ng
 ```
