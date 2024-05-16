@@ -28,7 +28,6 @@ With the new project setup, open the project folder in the terminal and use `npm
 npm i agora-rtc-sdk-ng
 ```
 
-
 ## Core Structure (HTML) 
 Let’s start by laying out our basic html structure. There are a few UI elements we must have, such as the local video, the remote videos, a toolbar that contains buttons for muting and unmuting the audio/video, a button to screen-share, and a button to leave the chat. Open the [`index.html`](index.html) file and replace it with the code below.
 
@@ -87,8 +86,8 @@ Let's start with the `container`, it wraps the three divs used to display the lo
 
 Now looking at the `overlay` we can see it's a simple modal with an embedded form, a single input for the `Channel Name`, and a button to `Join Channel`. We're going to use the `Channel Name` as a way of grouping users together into the same video chat.
 
-## Adding in CSS and JS
-Now that we have our html set up, we can drop in some simple html styles. Open the `style.css` file and add this CSS below the existing CSS.
+## Adding in CSS
+Now that we have our html set up, we can drop in some simple styles. Open the `style.css` file and add this CSS below the existing CSS.
 
 ```CSS
 /* Video Call container */
