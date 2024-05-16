@@ -24,6 +24,7 @@ Follow the Vite instructions: give your project a name `agora-group-video-chat`,
 
 ### Install the Agora SDK
 With the new project setup, navigate to the project folder in the terminal and use `npm` to install the Agora Video Web SDK
+
 ```bash
 npm i agora-rtc-sdk-ng
 ```
@@ -86,8 +87,8 @@ Let's start with the `container`, it wraps the three divs used to display the lo
 
 Now looking at the `overlay` we can see it's a simple modal with an embedded form, a single input for the `Channel Name`, and a button to `Join Channel`. We're going to use the `Channel Name` as a way of grouping users together into the same video chat.
 
-## Adding in CSS and JS
-Now that we have our html set up, we can drop in some simple html styles. Open the `style.css` file and add this CSS below the existing CSS.
+## Adding in CSS
+Now that we have our html set up, we can drop in some simple styles. Open the `style.css` file and add this CSS below the existing CSS.
 
 ```CSS
 /* Video Call container */
